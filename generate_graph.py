@@ -6,6 +6,7 @@ import argparse
 
 import pydot
 
+
 class Operation(object):
     """Represent an operation."""
     def __init__(self, is_write, transaction_number, data_item):
@@ -44,28 +45,34 @@ for line_no, line in enumerate(args.input_file):
                                 line_match.group(3)))
 args.input_file.close()
 
-nodes = {}
-graph = pydot.Dot(graph_type='digraph')
+transactions = set()
+conflicts = set()
 
 for i in xrange(len(operations) - 1):
     op1 = operations[i]
-    try:
-        node1 = nodes[op1.transaction_number]
-    except KeyError:
-        node1 = pydot.Node('T{0}'.format(op1.transaction_number))
-        nodes[op1.transaction_number] = node1
-        graph.add_node(node1)
+    transactions.add(op1.transaction_number)
     for j in xrange(i + 1, len(operations)):
         op2 = operations[j]
         if ((op1.is_write or op2.is_write) and
                 op1.transaction_number != op2.transaction_number and
                 op1.data_item == op2.data_item):
-            try:
-                node2 = nodes[op2.transaction_number]
-            except KeyError:
-                node2 = pydot.Node('T{0}'.format(op2.transaction_number))
-                nodes[op2.transaction_number] = node2
-                graph.add_node(node2)
-            graph.add_edge(pydot.Edge(node1, node2, label=op1.data_item))
+            conflicts.add((op1.transaction_number,
+                           op2.transaction_number,
+                           op1.data_item))
+
+
+graph = pydot.Dot(graph_type='digraph')
+node_names = {}
+
+for transaction in transactions:
+    node = pydot.Node('T{0}'.format(transaction))
+    node_names[transaction] = node
+    graph.add_node(node)
+
+
+for op1_num, op2_num, data_item in conflicts:
+    graph.add_edge(pydot.Edge(node_names[op1_num],
+                              node_names[op2_num],
+                              label=data_item))
 
 graph.write_png(args.output_file)
