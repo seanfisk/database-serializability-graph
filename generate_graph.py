@@ -7,6 +7,7 @@ import argparse
 import pydot
 
 
+# Storage class.
 class Operation(object):
     """Represent an operation."""
     def __init__(self, is_write, transaction_number, data_item):
@@ -21,6 +22,7 @@ class Operation(object):
         self.transaction_number = transaction_number
         self.data_item = data_item
 
+# Parse arguments.
 arg_parser = argparse.ArgumentParser(
     description='Generate serializabilty graphs.')
 arg_parser.add_argument(
@@ -31,8 +33,11 @@ arg_parser.add_argument(
     help='Output image file to contain the graph.')
 args = arg_parser.parse_args()
 
+# Line recognition regular expression.
 line_re = re.compile(r'([rw])(\d+)\((\w+)\)$')
 
+# Parse the input file, creating representations of operations and
+# transactions.
 operations = []
 transactions = set()
 
@@ -47,8 +52,10 @@ for line_no, line in enumerate(args.input_file):
     operations.append(Operation(is_write, transaction_number, data_item))
     transactions.add(transaction_number)
 
+# Done with the input file.
 args.input_file.close()
 
+# Calculate conflicts.
 conflicts = set()
 
 for i in xrange(len(operations) - 1):
@@ -63,18 +70,21 @@ for i in xrange(len(operations) - 1):
                            op1.data_item))
 
 
+# Output the graph.
 graph = pydot.Dot(graph_type='digraph')
 node_names = {}
 
+# Output graph nodes (transactions).
 for transaction in transactions:
     node = pydot.Node('T{0}'.format(transaction))
     node_names[transaction] = node
     graph.add_node(node)
 
-
+# Output graph edges (conflicts).
 for op1_num, op2_num, data_item in conflicts:
     graph.add_edge(pydot.Edge(node_names[op1_num],
                               node_names[op2_num],
                               label=data_item))
 
+# Write out the final product.
 graph.write_png(args.output_file)
