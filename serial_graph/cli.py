@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+""":mod:`serial_graph.cli` --- Command-line interface
+"""
 
 import sys
 import argparse

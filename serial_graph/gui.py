@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+""":mod:`serial_graph.gui` -- Graphical interface
+"""
 
 import sys
 
