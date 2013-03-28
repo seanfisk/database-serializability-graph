@@ -7,7 +7,7 @@ from cStringIO import StringIO
 
 from PySide import QtCore, QtGui, QtSvg
 
-from serial_graph.graph import generate_serializability_graph
+from serial_graph.graph import generate_serializability_graph, ParseError
 
 
 class MainWindow(QtGui.QMainWindow):
@@ -32,8 +32,14 @@ class MainWindow(QtGui.QMainWindow):
 
     def _submit_button_clicked(self):
         schedule_file = StringIO(self.input_area.toPlainText())
-        graph = generate_serializability_graph(schedule_file)
-        schedule_file.close()
+        try:
+            graph = generate_serializability_graph(schedule_file)
+        except ParseError as error:
+            QtGui.QMessageBox(QtGui.QMessageBox.Warning, 'Parse error',
+                              str(error)).exec_()
+            return
+        finally:
+            schedule_file.close()
 
         output_svg_file = StringIO()
         graph.draw(output_svg_file, format='svg')
