@@ -10,6 +10,11 @@ from PySide import QtCore, QtGui, QtSvg
 from serial_graph.graph import generate_serializability_graph, ParseError
 
 
+class SvgWidget(QtSvg.QSvgWidget):
+    def sizeHint(self):
+        return super(SvgWidget, self).sizeHint() * 3
+
+
 class MainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -25,8 +30,12 @@ class MainWindow(QtGui.QMainWindow):
         self.form_layout.addWidget(self.submit_button)
         self.central_layout.addLayout(self.form_layout, 1)
 
-        self.output_area = QtSvg.QSvgWidget()
-        self.central_layout.addWidget(self.output_area, 1)
+        self.output_area = SvgWidget()
+        size_policy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding,
+                                        QtGui.QSizePolicy.MinimumExpanding)
+        self.output_area.setSizePolicy(size_policy)
+        self.central_layout.addWidget(
+            self.output_area, 1, QtCore.Qt.AlignCenter)
 
         self.setCentralWidget(self.central_widget)
 
