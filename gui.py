@@ -4,6 +4,7 @@ import sys
 
 from PySide import QtGui, QtSvg
 
+
 class MainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
@@ -18,6 +19,7 @@ class MainWindow(QtGui.QMainWindow):
         self.central_layout.addWidget(self.output_area)
 
         self.setCentralWidget(self.central_widget)
+
 
 def main(argv):
     app = QtGui.QApplication(argv)
