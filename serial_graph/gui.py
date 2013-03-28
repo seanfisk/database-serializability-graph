@@ -23,12 +23,27 @@ class MainWindow(QtGui.QMainWindow):
         self.submit_button = QtGui.QPushButton('Submit')
         self.submit_button.clicked.connect(self._submit_button_clicked)
         self.form_layout.addWidget(self.submit_button)
-        self.central_layout.addLayout(self.form_layout)
+        self.central_layout.addLayout(self.form_layout, 1)
 
         self.output_area = QtSvg.QSvgWidget()
-        self.central_layout.addWidget(self.output_area)
+        self.central_layout.addWidget(self.output_area, 1)
 
         self.setCentralWidget(self.central_widget)
+
+        self._load_default_data()
+        self._submit_button_clicked()
+
+    def _load_default_data(self):
+        self.input_area.setPlainText('''r1(X)
+r2(Z)
+r3(X)
+r1(Z)
+r2(Y)
+r3(Y)
+w1(X)
+w2(Z)
+w3(Y)
+w2(Y)''')
 
     def _submit_button_clicked(self):
         schedule_file = StringIO(self.input_area.toPlainText())
@@ -51,7 +66,7 @@ def main(argv):
     app = QtGui.QApplication(argv)
 
     win = MainWindow()
-    win.show()
+    win.showMaximized()
     win.raise_()
 
     app.exec_()
