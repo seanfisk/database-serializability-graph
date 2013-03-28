@@ -4,7 +4,7 @@ from __future__ import print_function
 import re
 import argparse
 
-import pydot
+import pygraphviz as pgv
 
 
 # Storage class.
@@ -71,20 +71,16 @@ for i in xrange(len(operations) - 1):
 
 
 # Output the graph.
-graph = pydot.Dot(graph_type='digraph')
-node_names = {}
+graph = pgv.AGraph(strict=False, directed=True)
 
 # Output graph nodes (transactions).
 for transaction in transactions:
-    node = pydot.Node('T{0}'.format(transaction))
-    node_names[transaction] = node
-    graph.add_node(node)
+    graph.add_node(transaction, label='T{0}'.format(transaction))
 
 # Output graph edges (conflicts).
 for op1_num, op2_num, data_item in conflicts:
-    graph.add_edge(pydot.Edge(node_names[op1_num],
-                              node_names[op2_num],
-                              label=data_item))
+    graph.add_edge(op1_num, op2_num, label=data_item)
 
 # Write out the final product.
-graph.write_png(args.output_file)
+graph.layout(prog='dot')
+graph.draw(args.output_file)
