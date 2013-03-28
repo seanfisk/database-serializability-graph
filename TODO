@@ -1,0 +1,9 @@
+GUI
+
+Package for Mac
+Package for Windows
+Add option to save SVG file
+Add option to load schedule from a file
+Determine whether the graph is serializable (cyclic) - using NetworkX
+Do official project setup (paver, flake8, docs, requirements file, etc.)
+Change fixed-size SVG display to variable size (maybe switch to PNG? hopefully not)
