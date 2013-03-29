@@ -12,7 +12,7 @@ from PySide import QtCore, QtGui, QtSvg
 from serial_graph.graph import generate_serializability_graph, ParseError
 
 
-class SvgWidget(QtSvg.QSvgWidget):
+class AspectRatioSvgWidget(QtSvg.QSvgWidget):
     def paintEvent(self, paint_event):
         painter = QtGui.QPainter(self)
         default_width, default_height = self.renderer().defaultSize().toTuple()
@@ -33,31 +33,6 @@ class SvgWidget(QtSvg.QSvgWidget):
             painter,
             QtCore.QRectF(new_left, new_top, new_width, new_height))
 
-    # def sizeHint(self):
-    #     return super(SvgWidget, self).sizeHint() * 3
-
-
-class ResizeLabel(QtGui.QLabel):
-    def resizeEvent(self, resize_event):
-        self.widget_size = resize_event.size()
-        super(ResizeLabel, self).resizeEvent(resize_event)
-
-    def paintEvent(self, paint_event):
-        painter = QtGui.QPainter(self)
-
-        if self.pixmap():
-            center_point = QtCore.QPoint(0, 0)
-            # Scale new image.
-            scaled_pixmap = self.pixmap().scaled(
-                self.widget_size, QtCore.Qt.KeepAspectRatio)
-            # Calculate image center position into screen.
-            center_point.setX(
-                (self.widget_size.width() - scaled_pixmap.width()) / 2)
-            center_point.setY(
-                (self.widget_size.height() - scaled_pixmap.height()) / 2)
-            # Draw image.
-            painter.drawPixmap(center_point, scaled_pixmap)
-
 
 class MainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
@@ -74,16 +49,7 @@ class MainWindow(QtGui.QMainWindow):
         self.form_layout.addWidget(self.submit_button)
         self.central_layout.addLayout(self.form_layout, 1)
 
-        # self.output_area = ResizeLabel()
-        # self.output_area.setPixmap(
-        #     QtGui.QPixmap.fromImage(QtGui.QImage('out.png')))
-        # self.output_area.setPixmap(pixmap.scaled(self.output_area.size(),
-        #                                          QtCore.Qt.KeepAspectRatio))
-
-        self.output_area = SvgWidget()
-        # size_policy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding,
-        #                                 QtGui.QSizePolicy.MinimumExpanding)
-        # self.output_area.setSizePolicy(size_policy)
+        self.output_area = AspectRatioSvgWidget()
         self.central_layout.addWidget(
             self.output_area, 1)
 
