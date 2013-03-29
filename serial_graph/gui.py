@@ -21,12 +21,12 @@ class AspectRatioSvgWidget(QtSvg.QSvgWidget):
         ratio_y = widget_height / default_height
         if ratio_x < ratio_y:
             new_width = widget_width
-            new_height = new_width * default_height / default_width
+            new_height = widget_width * default_height / default_width
             new_left = 0
             new_top = (widget_height - new_height) / 2
         else:
+            new_width = widget_height * default_width / default_height
             new_height = widget_height
-            new_width = new_height * default_width / default_height
             new_left = (widget_width - new_width) / 2
             new_top = 0
         self.renderer().render(
