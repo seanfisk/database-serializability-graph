@@ -23,7 +23,7 @@ class ResizeLabel(QtGui.QLabel):
     def paintEvent(self, paint_event):
         painter = QtGui.QPainter(self)
 
-        if self.pixmap:
+        if self.pixmap():
             center_point = QtCore.QPoint(0, 0)
             # Scale new image.
             scaled_pixmap = self.pixmap().scaled(
