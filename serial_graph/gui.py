@@ -38,25 +38,45 @@ class MainWindow(QtGui.QMainWindow):
     def __init__(self, parent=None):
         super(MainWindow, self).__init__(parent)
 
+        # Create menu.
+        self.menu_bar = QtGui.QMenuBar()
+        self.file_menu = self.menu_bar.addMenu('&File')
+        # self.file_action = self.file_menu.addAction('&Open...')
+        # self.file_action.setShortcut(QtGui.QKeySequence.Open)
+        # self.file_action.triggered.connect(self._load_file)
+        self.submit_action = self.file_menu.addAction('Submit')
+        # self.submit_action.setShortcut(QtGui.QKeySequence(
+        #     QtCore.Qt.ControlModifier | QtCore.Qt.Key_Return))
+        self.submit_action.triggered.connect(self._submit)
+        self.quit_action = self.file_menu.addAction('&Quit')
+        self.quit_action.setShortcut(QtGui.QKeySequence.Quit)
+        self.quit_action.triggered.connect(self.close)
+        self.setMenuBar(self.menu_bar)
+
+        # Create central widget.
         self.central_widget = QtGui.QWidget()
         self.central_layout = QtGui.QHBoxLayout(self.central_widget)
 
+        # Left side.
         self.form_layout = QtGui.QVBoxLayout()
         self.input_area = QtGui.QPlainTextEdit()
         self.form_layout.addWidget(self.input_area)
         self.submit_button = QtGui.QPushButton('Submit')
-        self.submit_button.clicked.connect(self._submit_button_clicked)
+        self.submit_button.setShortcut(QtGui.QKeySequence(
+            QtCore.Qt.ControlModifier | QtCore.Qt.Key_Return))
+        self.submit_button.clicked.connect(self._submit)
         self.form_layout.addWidget(self.submit_button)
         self.central_layout.addLayout(self.form_layout, 1)
 
+        # Right side.
         self.output_area = AspectRatioSvgWidget()
-        self.central_layout.addWidget(
-            self.output_area, 1)
+        self.central_layout.addWidget(self.output_area, 1)
 
         self.setCentralWidget(self.central_widget)
 
+        # Load up default data.
         self._load_default_data()
-        self._submit_button_clicked()
+        self._submit()
 
     def _load_default_data(self):
         self.input_area.setPlainText('''r1(X)
@@ -70,7 +90,7 @@ w2(Z)
 w3(Y)
 w2(Y)''')
 
-    def _submit_button_clicked(self):
+    def _submit(self):
         schedule_file = StringIO(self.input_area.toPlainText())
         try:
             graph = generate_serializability_graph(schedule_file)
