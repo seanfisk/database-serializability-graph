@@ -76,7 +76,7 @@ class MainWindow(QtGui.QMainWindow):
 
         # Load up default data.
         self._load_default_data()
-        self._submit()
+        #self._submit()
 
     def _load_default_data(self):
         self.input_area.setPlainText('''r1(X)
@@ -101,10 +101,9 @@ w2(Y)''')
         finally:
             schedule_file.close()
 
-        output_svg_file = StringIO()
-        graph.draw(output_svg_file, format='svg')
-        self.output_area.load(QtCore.QByteArray(output_svg_file.getvalue()))
-        output_svg_file.close()
+        self.output_area.load(QtCore.QByteArray(
+            graph.create(prog='dot',  # default
+                         format='svg')))
 
 
 def main(argv):
