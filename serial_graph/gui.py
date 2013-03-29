@@ -2,6 +2,8 @@
 """:mod:`serial_graph.gui` -- Graphical interface
 """
 
+from __future__ import division
+
 import sys
 from cStringIO import StringIO
 
@@ -11,8 +13,28 @@ from serial_graph.graph import generate_serializability_graph, ParseError
 
 
 class SvgWidget(QtSvg.QSvgWidget):
-    def sizeHint(self):
-        return super(SvgWidget, self).sizeHint() * 3
+    def paintEvent(self, paint_event):
+        painter = QtGui.QPainter(self)
+        default_width, default_height = self.renderer().defaultSize().toTuple()
+        widget_width, widget_height = self.size().toTuple()
+        ratio_x = widget_width / default_width
+        ratio_y = widget_height / default_height
+        if ratio_x < ratio_y:
+            new_width = widget_width
+            new_height = new_width * default_height / default_width
+            new_left = 0
+            new_top = (widget_height - new_height) / 2
+        else:
+            new_height = widget_height
+            new_width = new_height * default_width / default_height
+            new_left = (widget_width - new_width) / 2
+            new_top = 0
+        self.renderer().render(
+            painter,
+            QtCore.QRectF(new_left, new_top, new_width, new_height))
+
+    # def sizeHint(self):
+    #     return super(SvgWidget, self).sizeHint() * 3
 
 
 class ResizeLabel(QtGui.QLabel):
@@ -52,13 +74,13 @@ class MainWindow(QtGui.QMainWindow):
         self.form_layout.addWidget(self.submit_button)
         self.central_layout.addLayout(self.form_layout, 1)
 
-        self.output_area = ResizeLabel()
-        self.output_area.setPixmap(
-            QtGui.QPixmap.fromImage(QtGui.QImage('out.png')))
+        # self.output_area = ResizeLabel()
+        # self.output_area.setPixmap(
+        #     QtGui.QPixmap.fromImage(QtGui.QImage('out.png')))
         # self.output_area.setPixmap(pixmap.scaled(self.output_area.size(),
         #                                          QtCore.Qt.KeepAspectRatio))
 
-        # self.output_area = SvgWidget()
+        self.output_area = SvgWidget()
         # size_policy = QtGui.QSizePolicy(QtGui.QSizePolicy.MinimumExpanding,
         #                                 QtGui.QSizePolicy.MinimumExpanding)
         # self.output_area.setSizePolicy(size_policy)
@@ -67,8 +89,8 @@ class MainWindow(QtGui.QMainWindow):
 
         self.setCentralWidget(self.central_widget)
 
-        # self._load_default_data()
-        # self._submit_button_clicked()
+        self._load_default_data()
+        self._submit_button_clicked()
 
     def _load_default_data(self):
         self.input_area.setPlainText('''r1(X)
