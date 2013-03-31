@@ -1,3 +1,6 @@
+.. image:: https://secure.travis-ci.org/seanfisk/cpg-islands.png
+   :target: https://secure.travis-ci.org/seanfisk/cpg-islands
+
 ==========================================
  Database Serializability Graph Generator
 ==========================================
