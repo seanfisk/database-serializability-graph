@@ -1,5 +1,7 @@
-.. image:: https://secure.travis-ci.org/seanfisk/cpg-islands.png
-   :target: https://secure.travis-ci.org/seanfisk/cpg-islands
+.. image:: http://seanfisk.github.com/database-serializability-graph/screenshot.png
+   :target: http://seanfisk.github.com/database-serializability-graph/screenshot.png
+   :alt: Program screenshot
+   :height: 400px
 
 ==========================================
  Database Serializability Graph Generator
