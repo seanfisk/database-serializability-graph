@@ -32,6 +32,11 @@ Run the GUI in the following way (bash):
 
     PYTHONPATH=$PWD serial_graph/gui.py
 
+Entering Schedules
+==================
+
+Schedules use a defined format which can easily be learned by looking at some examples. Please see the examples in the ``tests/fixtures`` directory.
+
 .. _Python 2.7: http://python.org/download/releases/2.7.3/
 .. _Graphviz: http://graphviz.org/
 .. _PySide: http://pyside.org/
