@@ -3,6 +3,7 @@
 """
 
 import sys
+import os.path
 import argparse
 
 from serial_graph.graph import generate_serializability_graph
@@ -25,7 +26,11 @@ def main(argv):
     # Done with the input file.
     args.input_file.close()
 
-    graph.draw(args.output_file)
+    # Get format based upon extension.
+    extension = os.path.splitext(args.output_file)[1][1:]
+    graph.write(args.output_file,
+                prog='dot',  # default
+                format=extension)
 
 if __name__ == '__main__':
     raise SystemExit(main(sys.argv))

@@ -3,7 +3,7 @@
 
 import re
 
-import pygraphviz
+import pydot
 
 
 # Storage class.
@@ -88,18 +88,22 @@ def generate_serializability_graph(schedule_file):
     transactions, conflicts = _find_conflicts(schedule_file)
 
     # Create the graph.
-    graph = pygraphviz.AGraph(strict=False, directed=True)
+    graph = pydot.Dot(graph_type='digraph')
+
+    # Map of node name to node object.
+    node_names = {}
 
     # Output graph nodes (transactions).
     for transaction in transactions:
-        graph.add_node(transaction, label='T{0}'.format(transaction))
+        node = pydot.Node('T{0}'.format(transaction))
+        node_names[transaction] = node
+        graph.add_node(node)
 
     # Output graph edges (conflicts).
     for op1_num, op2_num, data_item in conflicts:
-        graph.add_edge(op1_num, op2_num, label=data_item)
-
-    # Use `dot' program for layout.
-    graph.layout(prog='dot')
+        graph.add_edge(pydot.Edge(node_names[op1_num],
+                           node_names[op2_num],
+                           label=data_item))
 
     # Don't write out the result here this allows the driver programs to either
     # write to a file with a path or a file descriptor in memory.
