@@ -20,11 +20,15 @@ Next, install the Python package requirements::
 
     pip install pydot
 
-Run the CLI in the following way (bash)::
+Run the CLI in the following way (bash):
+
+.. code-block:: bash
 
     PYTHONPATH=$PWD serial_graph/cli.py
 
-Run the GUI in the following way (bash)::
+Run the GUI in the following way (bash):
+
+.. code-block:: bash
 
     PYTHONPATH=$PWD serial_graph/gui.py
 
