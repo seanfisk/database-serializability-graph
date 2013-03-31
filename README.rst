@@ -1,8 +1,3 @@
-.. image:: http://seanfisk.github.com/database-serializability-graph/screenshot.png
-   :target: http://seanfisk.github.com/database-serializability-graph/screenshot.png
-   :alt: Program screenshot
-   :height: 400px
-
 ==========================================
  Database Serializability Graph Generator
 ==========================================
@@ -15,6 +10,10 @@ Running
 =======
 
 `Python 2.7`_ and Graphviz_ are necessary to run both the CLI and the GUI, and PySide_ is necessary for the GUI. Install as needed.
+
+.. _Python 2.7: http://python.org/download/releases/2.7.3/
+.. _Graphviz: http://graphviz.org/
+.. _PySide: http://pyside.org/
 
 First, pull down the code::
 
@@ -42,6 +41,9 @@ Entering Schedules
 
 Schedules use a defined format which can easily be learned by looking at some examples. Please see the examples in the ``tests/fixtures`` directory.
 
-.. _Python 2.7: http://python.org/download/releases/2.7.3/
-.. _Graphviz: http://graphviz.org/
-.. _PySide: http://pyside.org/
+Screenshot
+==========
+
+.. image:: http://seanfisk.github.com/database-serializability-graph/screenshot.png
+   :target: http://seanfisk.github.com/database-serializability-graph/screenshot.png
+   :alt: Program screenshot
