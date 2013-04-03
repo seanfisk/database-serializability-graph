@@ -11,6 +11,8 @@ from PySide import QtCore, QtGui, QtSvg
 
 from serial_graph.graph import generate_serializability_graph, ParseError
 
+import networkx
+
 
 class AspectRatioSvgWidget(QtSvg.QSvgWidget):
     def paintEvent(self, paint_event):
@@ -69,8 +71,13 @@ class MainWindow(QtGui.QMainWindow):
         self.central_layout.addLayout(self.form_layout, 1)
 
         # Right side.
+        self.output_layout = QtGui.QVBoxLayout()
         self.output_area = AspectRatioSvgWidget()
-        self.central_layout.addWidget(self.output_area, 1)
+        self.output_layout.addWidget(self.output_area, 1)
+        self.conflict_serializable_label = QtGui.QLabel()
+        self.output_layout.addWidget(
+            self.conflict_serializable_label, 0, QtCore.Qt.AlignHCenter)
+        self.central_layout.addLayout(self.output_layout, 1)
 
         self.setCentralWidget(self.central_widget)
 
@@ -100,6 +107,13 @@ w2(Y)''')
             return
         finally:
             schedule_file.close()
+
+        is_conflict_serializable = (
+            networkx.algorithms.simple_cycles(
+                networkx.from_pydot(graph)) == [])
+        self.conflict_serializable_label.setText(
+            'This schedule is{0} conflict serializable.'.format(
+                '' if is_conflict_serializable else ' not'))
 
         self.output_area.load(QtCore.QByteArray(
             graph.create(prog='dot',  # default
