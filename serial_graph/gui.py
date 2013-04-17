@@ -86,7 +86,7 @@ class MainWindow(QtGui.QMainWindow):
 
         # Load up default data.
         self._load_default_data()
-        self._submit()
+        # self._submit()
 
     def _load_default_data(self):
         self.input_area.setPlainText('''r1(X)
