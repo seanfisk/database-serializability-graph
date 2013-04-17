@@ -62,6 +62,9 @@ class MainWindow(QtGui.QMainWindow):
         # Left side.
         self.form_layout = QtGui.QVBoxLayout()
         self.input_area = QtGui.QPlainTextEdit()
+        font = self.input_area.font()
+        font.setPointSize(50)
+        self.input_area.setFont(font)
         self.form_layout.addWidget(self.input_area)
         self.submit_button = QtGui.QPushButton('Submit')
         self.submit_button.setShortcut(QtGui.QKeySequence(
